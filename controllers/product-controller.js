@@ -32,11 +32,11 @@ const insertSample = async (req, res) => {
         tags: ["ios", "sndroid"],
       },
     ];
-    const result = await Product.insertMany(sampleProducts)
+    const result = await Product.insertMany(sampleProducts);
     res.status(201).json({
-        success: true,
-        data: result
-    })
+      success: true,
+      data: result,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -45,5 +45,74 @@ const insertSample = async (req, res) => {
   }
 };
 
+const getProducts = async (req, res) => {
+  try {
+    const result = await Product.aggregate([
+      {
+        $match: {
+          inStock: true,
+          price: {
+            $gte: 100,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$category",
+          avgPrice: {
+            $avg: "$price"
+          },
+          count: {
+            $sum : 1
+          }
+        }
+      }
+    ]);
+    res.status(200).json({
+      success: true,
+      result,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "error",
+    });
+  }
+};
 
-module.exports = { insertSample }
+const getProductAnalysis = async(req, res)=> {
+  try {
+    const result = await Product.aggregate([
+      {
+        $match: {
+          category: "Electronics"
+        }
+      }, 
+      {
+        $group: {
+          _id: 1,
+          totalRevenue: {
+            $sum: "$price"
+          },
+          averagePrice: {
+            $avg: "$price"
+          },
+          maxProdictPrice: {
+            $max: "price"
+          }
+        }
+         }
+    ])
+    res.status(200).json({
+      success: true,
+      data: result
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      message: 'Failed'
+    })
+  }
+}
+
+module.exports = { insertSample, getProducts, getProductAnalysis };

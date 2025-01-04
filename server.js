@@ -6,6 +6,7 @@ const connectToDb = require("./database/db")
 const adminRoutes = require("./routes/admin-routes")
 const imageRoutes = require("./routes/image-routes")
 const productRoutes = require("./routes/product-routes")
+const bookRoutes = require("./routes/book-routes")
 const app = express()
 
 
@@ -21,7 +22,9 @@ app.use("/api/auth", authRoutes)
 app.use("/api/home", homeRoutes )
 app.use("/api/admin", adminRoutes)
 app.use("/api/image", imageRoutes)
-app.use("/api/insert", productRoutes)
+app.use("/api/product", productRoutes)
+app.use("/api/books", bookRoutes)
+
 
 
 app.listen(PORT, ()=>{

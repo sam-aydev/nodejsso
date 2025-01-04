@@ -1,8 +1,10 @@
 const express= require("express")
-const { insertSample } = require("../controllers/product-controller")
+const { insertSample, getProducts, getProductAnalysis } = require("../controllers/product-controller")
 
 const router = express.Router()
 
-router.post("/", insertSample)
+router.post("/insert", insertSample)
+router.get("/", getProducts)
+router.get("/analysis", getProductAnalysis)
 
 module.exports = router
