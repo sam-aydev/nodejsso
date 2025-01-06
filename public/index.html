@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket Io</title>
+</head>
+<body>
+    <div id="user-list">
+        <h3>Onlien users</h3>
+        <ul id="users"></ul>
+    </div>
+    <div id="chat"></div>
+    <form action=""  id="message-form" id="message-input" placeholder="Put your message">
+        <input type="text">
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io()
+        const chat = document.getElementById("chat")
+        const userList = document.getElementById("users")
+        const messageForm = document.getElementById("message-form")
+        const messageInput = document.getElementById("message-input") 
+        const userName = prompt("Enter your username")
+        socket.emit("join", userName)
+        socket.on("userJoined", (user)=>{
+            addMessage(`${user} has joined chat`)
+        })
+
+        function addMessage(input){
+            const messageElement =document.createElement("div")
+            messageElement.textContent = input
+            chat.appendChild(messageElement)
+            chat.scrollTop = chat.scrollHeight
+        }
+</script>
+</body>
+</html>
